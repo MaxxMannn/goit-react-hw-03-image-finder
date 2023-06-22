@@ -1,43 +1,43 @@
-import { Component } from "react"
-import PropTypes from 'prop-types'
-import './styles.css'
+import PropTypes from 'prop-types';
+import { Component } from 'react';
+import { createPortal } from 'react-dom';
 
-class Modal extends Component{
+import { ModalBackdrop, ModalStyles } from './Modal.styled';
 
-    componentDidMount(){
-        window.addEventListener('keydown',this.handleKeyDown)
-      }
-    
-    componentWillUnmount(){
-        window.removeEventListener('keydown',this.handleKeyDown)
+const modalRoot = document.querySelector('#modal-root');
+
+export default class Modal extends Component {
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyDown);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  handleKeyDown = evt => {
+    if (evt.code === 'Escape') {
+      this.props.onClose();
     }
-    
-    closeModalFunc = e => {
-        if(e.currentTarget === e.target){
-            this.props.toggleModal()
-        }
+  };
+
+  onClickBackdrop = evt => {
+    if (evt.currentTarget === evt.target) {
+      this.props.onClose();
     }
-    
-    handleKeyDown = (e) => {
-        console.log('Escape')
-        if(e.code === 'Escape'){
-            this.props.toggleModal()
-        }
-    }
-    render(){
-        return(
-            <div onClick={this.closeModalFunc} className ="overlay">
-                <div className ="modal">
-                    <img src={this.props.hrefBigPhoto} alt="" className='modalPhoto' />
-                </div>
-            </div>
-        )
-    }
+  };
+
+  render() {
+    return createPortal(
+      <ModalBackdrop onClick={this.onClickBackdrop}>
+        <ModalStyles>{this.props.children}</ModalStyles>
+      </ModalBackdrop>,
+      modalRoot
+    );
+  }
 }
 
 Modal.propTypes = {
-    hrefBigPhoto: PropTypes.string.isRequired,
-    toggleModal:PropTypes.func.isRequired,
-}
-
-export default Modal
+  children: PropTypes.node.isRequired,
+  onClose: PropTypes.func.isRequired,
+};

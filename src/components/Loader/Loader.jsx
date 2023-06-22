@@ -1,21 +1,16 @@
-import { MagnifyingGlass } from  'react-loader-spinner'
-import './styles.css'
+import { LoaderStyled, LoaderWrapper } from './Loader.styled';
 
-const Loader = () =>{
-    return (
-        <div className='loaderContainer'>
-            <MagnifyingGlass 
-                        visible={true}
-                        width="calc(100%/7)"
-                        height="calc(100%/7)"
-                        ariaLabel="MagnifyingGlass-loading"
-                        wrapperStyle={{}}
-                        wrapperClass="MagnifyingGlass-wrapper"
-                        glassColor = '#c0efff'
-                        color = '#3d3d3d'
-                        /> 
-        </div>
-    )
+export default function Loader() {
+  return (
+    <LoaderWrapper>
+      <LoaderStyled
+        visible={true}
+        height="130"
+        width="130"
+        ariaLabel="dna-loading"
+        wrapperStyle={{}}
+        wrapperClass="dna-wrapper"
+      />
+    </LoaderWrapper>
+  );
 }
-
-export default Loader

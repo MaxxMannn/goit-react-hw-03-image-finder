@@ -1,81 +1,50 @@
-import {Component} from "react"
-import PropTypes from 'prop-types'
-import './styles.css'
-import { FaSearch } from "react-icons/fa";
-import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
+import { Component } from 'react';
+import {
+  Header,
+  SearchForm,
+  SearchFormButton,
+  SearchFormInput,
+  StyledBiSearchAlt,
+} from 'components/Searchbar/Searchbar.styled';
 
-class Searchbar extends Component {
-    state = {
-      currentValue:"",
-      prevName:'',
-    }
-    
-    searchBarValue = (e) => {
-      e.preventDefault()
+export default class Searchbar extends Component {
+  state = {
+    query: '',
+  };
 
-      if(this.state.currentValue.trim() === ""){
-        return toast.error(`Введіть слово для пошуку`, {
-          position: "top-right",
-          autoClose: 2500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          });
-      }
+  onChange = evt => {
+    this.setState({ query: evt.currentTarget.value.toLowerCase().trim() });
+  };
 
-      if(this.state.currentValue.trim() === this.state.prevName){
-        return toast.error(`Переглядаєте ${this.state.currentValue}`, {
-          position: "top-right",
-          autoClose: 2500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          });
-      }
-      
-        this.props.onSubmit(this.state.currentValue)
-        this.setState({
-          currentValue:"",
-          prevName:this.state.currentValue})
-    } 
-    
-    currentValue = e => {
-        this.setState({currentValue : e.currentTarget.value.toLowerCase().trim()})
-    }
+  onSubmit = evt => {
+    evt.preventDefault();
+    this.props.onSubmit(this.state.query);
+    this.setState({ query: '' });
+    evt.currentTarget.reset();
+  };
 
-    render(){
-    return(
-        <header className="searchbar">
-  <form onSubmit={this.searchBarValue} className="form">
-  <button disabled={this.props.didLoading} type="submit" className="button">
-      <FaSearch className='icon'/>
-    </button>
+  render() {
+    return (
+      <Header>
+        <SearchForm onSubmit={this.onSubmit}>
+          <SearchFormButton type="submit">
+            <StyledBiSearchAlt />
+          </SearchFormButton>
 
-    <input
-      className="input"
-      type="text"
-      autoComplete="off"
-      autoFocus
-      placeholder="Search images and photos"
-      value={this.state.currentValue}
-      onChange={this.currentValue}
-    /> 
-  
-  </form>
-</header>
-    )
+          <SearchFormInput
+            name="search"
+            type="text"
+            onChange={this.onChange}
+            placeholder="Search images and photos"
+          />
+        </SearchForm>
+      </Header>
+    );
+  }
 }
-}
-
 
 Searchbar.propTypes = {
+  // query: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  didLoading: PropTypes.bool.isRequired,
-}
-export default Searchbar
+};

@@ -1,6 +1,0 @@
-.gallery{
-    display: flex;
-    padding: 30px;
-    flex-wrap:wrap;
-    justify-content: space-between;
-}
